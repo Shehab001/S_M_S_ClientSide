@@ -72,6 +72,14 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/user/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const query = { uid: id };
+      const usr = await user.findOne(query);
+      res.send(usr);
+    });
+
     app.get("/data", async (req, res) => {
       const query = {};
       const category = await data.find(query);
