@@ -70,10 +70,17 @@ async function run() {
     });
     app.post("/attendance", async (req, res) => {
       const data = req.body;
-      console.log(data);
+
       const options = { ordered: true };
       const result = await attendance.insertMany(data, options);
       res.send(result);
+    });
+    app.get("/attendance", async (req, res) => {
+      const query = {};
+
+      const category = await attendance.find(query).toArray();
+      console.log(category);
+      res.send(category);
     });
   } finally {
   }
