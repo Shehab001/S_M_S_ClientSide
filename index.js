@@ -56,6 +56,7 @@ async function run() {
   try {
     const history = client.db("SMS").collection("Data");
     const student = client.db("SMS").collection("Student");
+    const teacher = client.db("SMS").collection("Teacher");
     const attendance = client.db("SMS").collection("Attendance");
 
     app.get("/data", async (req, res) => {
@@ -63,11 +64,19 @@ async function run() {
       const category = await data.find(query);
       res.send(category);
     });
+
     app.get("/student", async (req, res) => {
       const query = {};
       const category = await student.find(query).toArray();
       res.send(category);
     });
+
+    app.get("/teacher", async (req, res) => {
+      const query = {};
+      const category = await teacher.find(query).toArray();
+      res.send(category);
+    });
+
     app.post("/attendance", async (req, res) => {
       const data = req.body;
 
@@ -81,6 +90,21 @@ async function run() {
       const category = await attendance.find(query).toArray();
       console.log(category);
       res.send(category);
+    });
+
+    app.get("/deletestudent/:id", async (req, res) => {
+      const id = req.params.id;
+      // console.log(id);
+      const query = { name: id };
+      const result = await student.deleteOne(query);
+      res.send(result);
+    });
+    app.get("/deleteteacher/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const query = { name: id };
+      const result = await teacher.deleteOne(query);
+      res.send(result);
     });
   } finally {
   }
