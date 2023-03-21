@@ -34,14 +34,14 @@ const stripe = require("stripe")(
 //   });
 // });
 
-//homeify
+//homefy
 //S7LWJAfdHcg_Qup
 
 // middleware
 app.use(cors());
 app.use(express.json());
 //ycxtPXJJ7KqqWBFP
-//homeify
+//SMS
 const uri =
   "mongodb+srv://homeify:ycxtPXJJ7KqqWBFP@cluster0.8lf54jt.mongodb.net/?retryWrites=true&w=majority";
 
@@ -54,6 +54,27 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
+    const history = client.db("SMS").collection("Data");
+    const student = client.db("SMS").collection("Student");
+    const attendance = client.db("SMS").collection("Attendance");
+
+    app.get("/data", async (req, res) => {
+      const query = {};
+      const category = await data.find(query);
+      res.send(category);
+    });
+    app.get("/student", async (req, res) => {
+      const query = {};
+      const category = await student.find(query).toArray();
+      res.send(category);
+    });
+    app.post("/attendance", async (req, res) => {
+      const data = req.body;
+      console.log(data);
+      const options = { ordered: true };
+      const result = await attendance.insertMany(data, options);
+      res.send(result);
+    });
   } finally {
   }
 }
@@ -61,7 +82,7 @@ async function run() {
 run().catch(console.log);
 
 app.get("/", async (req, res) => {
-  res.send("sms server is running");
+  res.send("SMS server is running");
 });
 
 //others stripe method
@@ -84,4 +105,4 @@ app.get("/", async (req, res) => {
 //   res.send(status);
 // });
 
-app.listen(port, () => console.log(`homeify running on ${port}`));
+app.listen(port, () => console.log(`SMS running on ${port}`));
