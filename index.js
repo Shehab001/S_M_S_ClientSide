@@ -58,6 +58,19 @@ async function run() {
     const student = client.db("SMS").collection("Student");
     const teacher = client.db("SMS").collection("Teacher");
     const attendance = client.db("SMS").collection("Attendance");
+    const user = client.db("SMS").collection("User");
+
+    app.post("/saveuser", async (req, res) => {
+      const data = req.body;
+      // console.log(data.email);
+      const query = { name: data.email };
+      const update = { $set: data };
+      const options = { upsert: true };
+      const result = await user.updateOne(query, update, options);
+
+      // const result = await user.insertOne(data);
+      res.send(result);
+    });
 
     app.get("/data", async (req, res) => {
       const query = {};
